@@ -89,7 +89,7 @@ jobs:
           script: |
             set -euo pipefail
             PROJECT_ROOT=${{ secrets.HOSTINGER_PROJECT_ROOT }}
-            BRANCH=${GITHUB_REF_NAME}
+            BRANCH="${GITHUB_REF_NAME:-$(basename "$GITHUB_REF")}"
             if [ -z "$PROJECT_ROOT" ]; then
               echo "HOSTINGER_PROJECT_ROOT secret is required" >&2
               exit 1
