@@ -2,6 +2,7 @@
 import React, { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
+import { truncatePassword } from "@/lib/password";
 
 function ResetPasswordContent() {
   const params = useSearchParams();
@@ -17,15 +18,20 @@ function ResetPasswordContent() {
     e.preventDefault();
     setMessage(null);
     setError(null);
-    if (password !== confirm) {
+    const safePassword = truncatePassword(password);
+    const safeConfirm = truncatePassword(confirm);
+    if (safePassword.password !== safeConfirm.password) {
       setError("Passwords do not match");
       return;
+    }
+    if (safePassword.truncated || safeConfirm.truncated) {
+      setError("Password exceeded 72-byte security limit and was truncated for compatibility.");
     }
     setLoading(true);
     try {
       await apiFetch(`/auth/reset-password`, {
         method: "POST",
-        body: { token, new_password: password },
+        body: { token, new_password: safePassword.password },
       });
       setMessage("Password reset successfully. You can now sign in.");
       setTimeout(() => router.push("/signin"), 1500);

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import { PASSWORD_MAX_BYTES, truncatePassword } from "@/lib/password";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -11,39 +12,13 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function truncateToMaxUtf8Bytes(input: string, maxBytes: number): string {
-    const encoder = new TextEncoder();
-    if (encoder.encode(input).length <= maxBytes) return input;
-    // Reduce length until encoded bytes fit within maxBytes
-    let result = input;
-    // Fast path: binary search the cut point
-    let low = 0;
-    let high = input.length;
-    while (low < high) {
-      const mid = Math.floor((low + high) / 2);
-      const slice = input.slice(0, mid);
-      const size = encoder.encode(slice).length;
-      if (size <= maxBytes) {
-        result = slice;
-        low = mid + 1;
-      } else {
-        high = mid;
-      }
-    }
-    // Ensure final result still within limit (guard edge-case)
-    while (encoder.encode(result).length > maxBytes && result.length > 0) {
-      result = result.slice(0, -1);
-    }
-    return result;
-  }
-
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
     try {
-      const safePassword = truncateToMaxUtf8Bytes(form.password, 72);
-      if (safePassword !== form.password) {
+      const { password: safePassword, truncated } = truncatePassword(form.password);
+      if (truncated) {
         setError("Password was longer than 72 bytes and has been truncated for compatibility.");
       }
       await register({ ...form, password: safePassword });
@@ -95,8 +70,8 @@ export default function SignUpPage() {
         </div>
         <div>
           <label className="mb-1 block text-sm">Password</label>
-          <input type="password" maxLength={72} className="w-full rounded border px-3 py-2" required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
-          <p className="mt-1 text-xs text-gray-500">Max 72 characters.</p>
+          <input type="password" maxLength={PASSWORD_MAX_BYTES} className="w-full rounded border px-3 py-2" required value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+          <p className="mt-1 text-xs text-gray-500">Passwords are limited to {PASSWORD_MAX_BYTES} bytes for security compatibility.</p>
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button disabled={loading} className="w-full rounded bg-gray-900 px-4 py-2 text-white disabled:opacity-50">{loading ? "Creating..." : "Sign up"}</button>
