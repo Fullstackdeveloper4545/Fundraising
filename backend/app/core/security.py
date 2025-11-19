@@ -1,38 +1,48 @@
 from datetime import datetime, timedelta
-from typing import Optional, Union
+from typing import Optional, Tuple
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
 from app.core.config import settings
 import secrets
 import string
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def _truncate_bcrypt(password: str, max_bytes: int = 72) -> str:
-    """Truncate a password to bcrypt's 72-byte limit safely in UTF-8.
-    This prevents passlib from raising when inputs exceed the limit.
-    """
+def normalize_password(password: str, max_bytes: int = 72) -> Tuple[str, bool]:
+    """Ensure a password fits bcrypt's 72-byte limit. Returns (safe_password, was_truncated)."""
     try:
         data = password.encode("utf-8")
     except Exception:
-        return password
+        return password, False
     if len(data) <= max_bytes:
-        return password
-    return data[:max_bytes].decode("utf-8", errors="ignore")
+        return password, False
+    truncated = data[:max_bytes].decode("utf-8", errors="ignore")
+    return truncated, True
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash, honoring bcrypt's 72-byte limit."""
-    safe = _truncate_bcrypt(plain_password)
-    return pwd_context.verify(safe, hashed_password)
+    safe, truncated = normalize_password(plain_password)
+    if truncated:
+        logger.warning("Password exceeded bcrypt limit during verification and was truncated")
+    try:
+        return pwd_context.verify(safe, hashed_password)
+    except ValueError:
+        logger.error("Password verification failed due to bcrypt size limits")
+        return False
 
 
 def get_password_hash(password: str) -> str:
     """Hash a password, honoring bcrypt's 72-byte limit."""
-    safe = _truncate_bcrypt(password)
+    safe, truncated = normalize_password(password)
+    if truncated:
+        logger.warning("Password exceeded bcrypt limit during hashing and was truncated")
     return pwd_context.hash(safe)
 
 

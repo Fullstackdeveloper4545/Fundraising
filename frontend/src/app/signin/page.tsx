@@ -3,6 +3,7 @@ import React, { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { apiFetch } from "@/lib/api";
+import { truncatePassword } from "@/lib/password";
 
 function SignInContent() {
   const router = useRouter();
@@ -23,7 +24,11 @@ function SignInContent() {
     setError(null);
     setLoading(true);
     try {
-      await login(form.email, form.password);
+      const { password: safePassword, truncated } = truncatePassword(form.password);
+      if (truncated) {
+        setError("Password exceeded 72-byte compatibility limit and was trimmed.");
+      }
+      await login(form.email, safePassword);
       router.push("/");
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Sign in failed";

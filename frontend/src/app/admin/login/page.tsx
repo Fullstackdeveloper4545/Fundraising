@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthAPI } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import { truncatePassword } from "@/lib/password";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -21,9 +22,13 @@ export default function AdminLogin() {
     setError(null);
 
     try {
+      const { password: safePassword, truncated } = truncatePassword(formData.password);
+      if (truncated) {
+        setError("Password exceeded 72-byte security limit and was trimmed.");
+      }
       const response = await AuthAPI.login({
         email: formData.email,
-        password: formData.password,
+        password: safePassword,
       });
 
       // Check if user is admin
