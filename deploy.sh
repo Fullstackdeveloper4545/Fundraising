@@ -61,11 +61,6 @@ if [ -d "$BACKEND_DIR" ]; then
   if [ -f requirements.txt ]; then
     run pip install -r requirements.txt
   fi
-  if [ -f run_migration.py ]; then
-    run python run_migration.py
-  else
-    log "run_migration.py not found, skipping migrations."
-  fi
   deactivate
 else
   log "Warning: backend directory $BACKEND_DIR not found. Skipping backend deployment."
