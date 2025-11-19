@@ -1,0 +1,18 @@
+fastapi
+uvicorn[standard]
+supabase
+python-jose[cryptography]
+# Ensure compatibility between passlib and bcrypt
+passlib[bcrypt]==1.7.4
+bcrypt==3.2.2
+python-multipart
+pydantic
+pydantic-settings
+stripe
+requests
+python-dotenv
+email-validator
+phonenumbers
+jinja2
+aiofiles
+httpx

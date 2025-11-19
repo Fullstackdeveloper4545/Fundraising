@@ -1,0 +1,570 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a; /* slate-900 */
+  --muted: #475569;      /* slate-600 */
+
+  /* Brand blues (custom theme) */
+  --brand-50:  #e6f8ff;
+  --brand-100: #ccefff;
+  --brand-200: #99dfff;
+  --brand-300: #66cfff;
+  --brand-400: #33bfff;
+  --brand-500: #00AFF0; /* primary */
+  --brand-600: #00AFF0; /* primary/base */
+  --brand-700: #0099D6; /* hover/active */
+
+  --card: #ffffff;
+  --border: #e5e7eb;
+  --ring: rgba(0, 175, 240, 0.2);
+  
+  /* Danger colors for logout */
+  --danger-50: #fef2f2;
+  --danger-100: #fee2e2;
+  --danger-200: #fecaca;
+  --danger-300: #fca5a5;
+  --danger-400: #f87171;
+  --danger-500: #ef4444;
+  --danger-600: #dc2626;
+  --danger-700: #b91c1c;
+  
+  /* Mobile-first spacing */
+  --mobile-padding: 1rem;
+  --desktop-padding: 2rem;
+  
+  /* Touch-friendly sizing */
+  --touch-target: 44px;
+  --button-height: 48px;
+}
+
+/* Smooth theme transition */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Primary button - Always blue */
+.btn-primary {
+  background-color: var(--brand-600);
+  color: #ffffff !important;
+  padding: 0.75rem 1.5rem; /* Increased for mobile */
+  border-radius: 0.75rem;  /* More rounded for mobile */
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+  transition: transform 100ms ease, box-shadow 100ms ease, background-color 150ms ease;
+  font-weight: 600;
+  font-size: 1rem;
+  min-height: var(--button-height);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: var(--brand-700);
+}
+.btn-primary:active { 
+  transform: translateY(1px); 
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.25);
+}
+
+/* Outline pill button - Mobile optimized */
+.btn-outline {
+  border: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--foreground);
+  transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+  font-weight: 500;
+  min-height: var(--button-height);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-outline:hover { 
+  background: var(--brand-50); 
+  border-color: var(--brand-200); 
+  box-shadow: 0 2px 6px var(--ring); 
+  color: var(--foreground);
+}
+
+/* Secondary button - Always blue */
+.btn-secondary {
+  background-color: var(--brand-600);
+  color: #ffffff !important;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  min-height: var(--button-height);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease, transform 100ms ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--brand-700);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(1px);
+}
+
+/* Success button - Theme aware */
+.btn-success {
+  background-color: #10b981;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  min-height: var(--button-height);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 150ms ease, transform 100ms ease;
+}
+
+.btn-success:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+}
+
+.btn-success:active {
+  transform: translateY(1px);
+}
+
+/* Feature badges / cards - Mobile-first */
+.badge, .card {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  transition: box-shadow 150ms ease, transform 100ms ease, border-color 150ms ease;
+}
+
+.card:hover { 
+  box-shadow: 0 8px 25px var(--ring); 
+  border-color: var(--brand-100); 
+  transform: translateY(-2px); 
+}
+
+/* Card titles should be more prominent */
+.card h1, .card h2, .card h3, .card h4, .card h5, .card h6 {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+/* Card descriptions can be muted */
+.card p, .card .description {
+  color: var(--muted);
+}
+
+/* Inputs / selects - Mobile optimized */
+input, textarea, select {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--card);
+  color: var(--foreground);
+  padding: 0.875rem 1rem;
+  outline: none;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+  font-size: 1rem;
+  min-height: var(--touch-target);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--muted);
+}
+
+input:hover, textarea:hover, select:hover { 
+  border-color: var(--brand-200); 
+}
+
+input:focus, textarea:focus, select:focus { 
+  box-shadow: 0 0 0 3px var(--ring); 
+  border-color: var(--brand-400); 
+  color: var(--foreground);
+}
+
+
+/* Link tint */
+a { 
+  color: var(--brand-600); 
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+a:hover { 
+  color: var(--brand-700); 
+  text-decoration: none;
+}
+
+/* Ensure link-styled buttons render white text across the whole clickable area */
+a.btn-primary,
+a.btn-secondary,
+a.btn-logout {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+a.btn-primary:hover,
+a.btn-secondary:hover,
+a.btn-logout:hover {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* If someone nests a link inside a button, keep text white and make the button the only click target */
+.btn-primary a,
+.btn-secondary a,
+.btn-logout a {
+  color: #ffffff !important;
+  text-decoration: none !important;
+  pointer-events: none; /* avoid only-the-text being clickable */
+}
+
+/* Global text styling for theme consistency */
+/* h1, h2, h3, h4, h5, h6 {
+  color: var(--foreground);
+  font-weight: 600;
+} */
+
+/* p, span, div {
+  color: var(--foreground);
+} */
+
+/* Muted text for secondary information */
+.text-muted {
+  color: var(--muted);
+}
+
+/* Error text */
+.text-error {
+  color: var(--danger-600);
+}
+
+/* Success text */
+.text-success {
+  color: #10b981;
+}
+
+/* Additional utility classes for theme consistency */
+.bg-theme {
+  background-color: var(--background);
+}
+
+.text-theme {
+  color: var(--foreground);
+}
+
+.border-theme {
+  /* border-color: var(--border); */
+}
+
+/* Progress bar styling */
+.progress-bar {
+  background-color: var(--border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background-color: #10b981;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+/* Alert/notification styling */
+.alert {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  color: var(--foreground);
+}
+
+.alert-success {
+  background-color: #f0fdf4;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.alert-error {
+  background-color: #fef2f2;
+  border-color: var(--danger-600);
+  color: var(--danger-700);
+}
+
+/* Footer specific styles - Blue theme */
+footer {
+  /* background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); */
+  color: white;
+}
+
+footer a {
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 150ms ease;
+}
+
+footer a:hover {
+  color: white;
+}
+
+footer h1, footer h2, footer h3, footer h4, footer h5, footer h6 {
+  color: white;
+}
+
+footer p, footer span {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Navbar specific styles - Blue theme */
+header {
+  /* background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); */
+  color: white;
+}
+
+header a {
+  color: white;
+  transition: color 150ms ease;
+}
+
+header a:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+header button {
+  color: white;
+}
+
+header span {
+  color: white;
+}
+
+/* Admin panel specific styles */
+.admin-header {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+}
+
+.admin-header h1, .admin-header h2, .admin-header h3 {
+  color: white;
+}
+
+.admin-header p, .admin-header span {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.admin-header a {
+  color: rgba(255, 255, 255, 0.9);
+  transition: color 150ms ease;
+}
+
+.admin-header a:hover {
+  color: white;
+}
+
+.admin-header button {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.admin-header button:hover {
+  color: white;
+}
+
+/* Admin tabs styling */
+.admin-tab-active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-bottom: 2px solid white;
+}
+
+.admin-tab-inactive {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.admin-tab-inactive:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Social media icons hover effect */
+footer a[aria-label] {
+  transition: all 0.2s ease;
+}
+
+footer a[aria-label]:hover {
+  transform: translateY(-2px);
+}
+
+/* Payment method badges */
+footer .payment-badge {
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+footer .payment-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  .btn-primary {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .btn-outline {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  input, textarea, select {
+    padding: 1rem 1.25rem;
+    font-size: 1.1rem;
+  }
+  
+  .card {
+    padding: 1.25rem 1.5rem;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  .btn-primary:hover,
+  .btn-outline:hover,
+  .card:hover {
+    transform: none;
+    box-shadow: initial;
+  }
+  
+  .btn-primary:active,
+  .btn-outline:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Improved focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better text rendering */
+* {
+  text-rendering: optimizeLegibility;
+}
+
+/* Modal positioning utilities */
+.modal-positioned {
+  position: fixed;
+  z-index: 50;
+}
+
+.modal-content {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Logout button styling - Always blue */
+.btn-logout {
+  background-color: var(--brand-600);
+  color: #ffffff !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 150ms ease, transform 100ms ease;
+  border: none;
+}
+
+/* Ensure nested elements (icons/spans) inside buttons also render white */
+.btn-primary *, .btn-secondary *, .btn-logout * { color: #ffffff !important; }
+
+.btn-logout:hover {
+  background-color: var(--brand-700);
+}
+
+.btn-logout:active {
+  transform: translateY(1px);
+}
+
+/* SweetAlert2 Custom Styles */
+.swal2-backdrop-blur {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+.swal2-popup-custom {
+  border-radius: 1rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid var(--border) !important;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+}
+
+.swal2-popup-custom .swal2-title {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: var(--foreground) !important;
+}
+
+.swal2-popup-custom .swal2-html-container {
+  font-size: 1rem !important;
+  color: var(--muted) !important;
+  line-height: 1.6 !important;
+}
+
+.swal2-popup-custom .swal2-confirm {
+  background-color: var(--brand-600) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.swal2-popup-custom .swal2-confirm:hover {
+  background-color: var(--brand-700) !important;
+  transform: translateY(-1px) !important;
+}
+
+.swal2-popup-custom .swal2-cancel {
+  background-color: var(--muted) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.swal2-popup-custom .swal2-cancel:hover {
+  background-color: var(--foreground) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Optional: keep icons readable across themes */
+.swal2-popup-custom .swal2-icon .swal2-icon-content {
+  color: var(--foreground) !important;
+}
+
