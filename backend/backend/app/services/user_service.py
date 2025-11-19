@@ -6,7 +6,7 @@ import string
 
 from app.models.user import User, UserCreate, UserUpdate, UserProfile, UserRole
 from app.models.user_internal import UserInternal
-from app.core.security import get_password_hash, generate_secure_token
+from app.core.security import get_password_hash, generate_secure_token, normalize_password
 from app.core.exceptions import NotFoundException, ValidationException
 from app.services.email_service import EmailService
 from app.services.email_templates import get_password_reset_email_html, get_password_reset_email_text
@@ -24,8 +24,10 @@ class UserService:
             # Generate referral code
             referral_code = self._generate_referral_code()
             
-            # Hash password
-            password_hash = get_password_hash(user_data.password)
+            safe_password, truncated = normalize_password(user_data.password)
+            if truncated:
+                logger.warning("Password exceeded bcrypt limit during registration and was truncated.")
+            password_hash = get_password_hash(safe_password)
             
             # Check if referred by someone
             referred_by = None
@@ -133,7 +135,10 @@ class UserService:
             if user_data.phone:
                 update_dict["phone"] = user_data.phone
             if user_data.password:
-                update_dict["password_hash"] = get_password_hash(user_data.password)
+                safe_password, truncated = normalize_password(user_data.password)
+                if truncated:
+                    logger.warning("Password exceeded bcrypt limit during update and was truncated.")
+                update_dict["password_hash"] = get_password_hash(safe_password)
             
             update_dict["updated_at"] = datetime.utcnow().isoformat()
             
